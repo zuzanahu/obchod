@@ -21,6 +21,10 @@ public class Kosik {
         return index;
     }
 
+    /**
+     * zkontroluje jestli se "polozka" v "kosiku" vyskytuje a kdyz ano zvysi "mnozstvi" polozky, kdyz ne prida ji tam
+     * @param p "polozka", kterou chci pridat do "kosiku"
+     */
     public void pridejPolozku(Polozka p) { //deleguju, co to je?
         for (int i = 0; i < this.polozky.size(); i++) {
             Polozka aktualniPolozka = this.polozky.get(i);
@@ -36,6 +40,10 @@ public class Kosik {
         polozky.add(p);
     }
 
+    /**
+     * vrati soucet vsech cen "polozek", ktere jsou v "kosiku", tzn. celkovou cenu, kterou bych zaplatila u pokladny
+     * @return double
+     */
     public double cena() {
         //polozky.forEach((polozka -> polozka.cena().reduce(0, Double::sum));
         double result = 0;
@@ -59,6 +67,10 @@ public class Kosik {
         polozky.clear();
     }
 
+    /**
+     * da vsechny "Polozky" do sekvence Stringu
+     * @return String sequence
+     */
     @Override
     public String toString()
     {
@@ -66,6 +78,7 @@ public class Kosik {
         b.append("Seznam kosiku:\n");
         for (Polozka p : polozky)
         {
+            // "append(p)" pripoji "Polozku" ve formatu ktery ovlivnuje metoda "toString()" ve tride "Polozka"
             b.append(p).append("\n");
         }
 

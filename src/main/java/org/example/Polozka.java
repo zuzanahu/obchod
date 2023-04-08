@@ -25,15 +25,24 @@ public class Polozka {
         }
 
     }
+
+    /**
+     * vypocita cenu "polozky" tim ze vynasobi "mnozstvi Polozky"  a "cenu Zbozi"
+     * @return double
+     */
     public double cena()
     {
-        return zbozi.getJednotkovaCena() * mnozstvi/zbozi.getJednotkoveMnozstvi();
+        return zbozi.getJednotkovaCena() * mnozstvi;
     }
 
+    /**
+     * vrati informace o "Zbozi" (cena/kusy = Kc/ks) a informace o "Polozce" ("mnozstvi", "cenu")
+     * @return String
+     */
     @Override
     public String toString()
     {
-        return String.format("%s * %d %s * %s", zbozi, mnozstvi*zbozi.getJednotkoveMnozstvi(), zbozi.getJednotka(), zbozi.getJednotkovaCena());
+        return String.format("%s: mnozstvi: %d %s, cena = %s ks * %s Kc = " + this.zbozi.jednotkovaCena*mnozstvi + " Kc", zbozi, mnozstvi*zbozi.getJednotkoveMnozstvi(), zbozi.getJednotka(), mnozstvi, zbozi.getJednotkovaCena());
     }
 
 

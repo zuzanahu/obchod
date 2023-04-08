@@ -52,7 +52,7 @@ public class Main {
         System.out.println("celkova cena = " + kosik.cena());
 
         kosik.pridejPolozku(new Polozka(seznamProduktu.get(5), 3));
-
+        kosik.pridejPolozku(new Polozka(seznamProduktu.get(9), 1));
         System.out.println(kosik);
         System.out.println("celkova cena = " + kosik.cena());
     }
