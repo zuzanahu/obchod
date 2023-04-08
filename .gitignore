@@ -1,2 +1,6 @@
 # ignore all directories with the name test
 test/
+
+# ignore all directories with the name target
+target/
+
