@@ -1,8 +1,6 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +48,11 @@ public class ObchodImpl implements Obchod {
         return nabidka.get(index);
     }*/ //spatne
 
+    /**
+     * hleda v nabidce "Zbozi" podle "nazvu Zbozi"
+     * @param nazev
+     * @return Zbozi
+     */
     public Zbozi najdi(String nazev) { //indexOf vyhledava na zaklade metody equals ktera je predefinovana ve Zbozi a nemusime pouzivat for loop a projizdet arrayList to je prasacky
         int index = nabidka.indexOf(new Zbozi("pomerance", "ks", 1, 2.5));
         if (index == -1) {
@@ -70,8 +73,24 @@ public class ObchodImpl implements Obchod {
         this.nabidka = nabidka;
     }
     public void ulozNabidku(String fileName) {
+        try
+        {
+            // Assume default encoding.
+            FileWriter fileWriter = new FileWriter(fileName);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-    };
+            for (Zbozi z : nabidka)
+                bufferedWriter.write(z.getNazev()+";" +z.getJednotkoveMnozstvi()+ ";"+ z.getJednotka() + ";" + z.getJednotkovaCena() + "\n");
+            bufferedWriter.close();
+        }
+        catch(IOException ex)
+        {
+            System.out.format("Error writing to fileName '%s'", fileName);
+            // Or we could just do this:
+            // ex.printStackTrace();
+        }
+    }
+
     public  void nactiNabidku(String fileName) {
         try {
             FileReader fileReader = new FileReader(fileName);
@@ -80,7 +99,7 @@ public class ObchodImpl implements Obchod {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String [] tokens = line.split(";");
-                Zbozi z = new Zbozi (tokens[0],tokens[1],Integer.parseInt(tokens[2]),Double.parseDouble(tokens[3]));
+                Zbozi z = new Zbozi (tokens[0],tokens[2],Integer.parseInt(tokens[1]),Double.parseDouble(tokens[3]));
                 nabidka.add(z);
             }
             bufferedReader.close();
@@ -88,11 +107,11 @@ public class ObchodImpl implements Obchod {
             System.out.format("Error reading from file '%s'", fileName);
         }
 
-    };
+    }
 
     public void vymazNabidku() {
         nabidka.clear();
-    };
+    }
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder(); //tadyten retezec muzu menit neni to constanta
