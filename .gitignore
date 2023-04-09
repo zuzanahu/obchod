@@ -1,4 +1,2 @@
 # ignore all directories with the name target - it cointains the builded java program
 target/
-
-*.[oa]

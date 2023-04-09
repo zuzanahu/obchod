@@ -26,8 +26,8 @@ public class Main {
         obchod.pridejZbozi(new Zbozi("pomerance", "kg", 1, 45));
         obchod.pridejZbozi(new Zbozi("mleko", "l", 1, 35));
         obchod.pridejZbozi(new Zbozi("maslo", "g", 250, 65));
-        obchod.pridejZbozi(new Zbozi("kofola", "l", 2, 28));*/
-
+        obchod.pridejZbozi(new Zbozi("kofola", "l", 2, 28));
+        obchod.ulozNabidku("nabidka.csv");*/
         obchod.nactiNabidku("nabidka.csv");
         obchod.vypisNabidku();
 
