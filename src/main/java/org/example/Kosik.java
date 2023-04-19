@@ -84,4 +84,10 @@ public class Kosik {
 
         return b.toString();
     }
+    public String[] asStringArray() {
+        String [] pole = new String[polozky.size()];
+        for (int i = 0; i < polozky.size(); i++)
+            pole[i] = polozky.get(i).toString();
+        return pole;
+    }
 }
