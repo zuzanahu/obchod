@@ -97,6 +97,8 @@ public class ApplicationWindow extends JFrame {
 
         pTlacitkaKosik = new JPanel(new GridLayout(0,1));
         pTlacitkaKosik.setSize(new Dimension(40, 60));
+        btKoupit = new JButton("Koupit");
+        pTlacitkaKosik.add(btKoupit);
         btPlus = new JButton("+");
         pTlacitkaKosik.add(btPlus);
         btMinus = new JButton("-");
@@ -109,16 +111,24 @@ public class ApplicationWindow extends JFrame {
         pKosik.add(btTiskni,BorderLayout.SOUTH);
         add(pKosik);
 
-        scText = new JScrollPane();
-        scText.setBorder(BorderFactory.createTitledBorder("Vystupni okno"));
+//        pText = new JPanel();
+//        pText.setBorder(BorderFactory.createTitledBorder("Vystupni okno"));
         vystup = new JTextArea(50,80);
-
+//        vystup.setColumns(20);
+//        vystup.setRows(5);
         scText = new JScrollPane(vystup);
+        scText.setBorder(BorderFactory.createTitledBorder("Vystupni okno"));
         scText.setViewportView(vystup);
+//        scText.setSize(80,60);
         add(scText);
 
         setSize(640, 480);
 
+        btKoupit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btKoupitActionPerformed(evt);
+            }
+        });
         btPridatZbozi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btPridatZboziActionPerformed(evt);
@@ -146,31 +156,41 @@ public class ApplicationWindow extends JFrame {
             }
         });
     }
+    private void btKoupitActionPerformed(ActionEvent evt) {
+        int k = lstKosik.getSelectedIndex(); // dostane index toho zbozi, ktere je označené uživatelem
+        int n = lstNabidka.getSelectedIndex();
 
-    private void btPlusActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btPlusActionPerformed
-        int index = lstKosik.getSelectedIndex();
-        if (index < 0) {
-            index = lstNabidka.getSelectedIndex();
-            if (index < 0) {
-                vystup.setText("V košíku není vybrána žádná položka.\n");
-
-            }
-            else {
-                Zbozi z = obchod.zbozi(index);
-                kosik.pridejPolozku(z);
-                lstNakup.setListData(kosik.asStringArray());
-                lstNakup.setSelectedIndex(kosik.indexPolozky(z));
+        if (n >= 0  && n < obchod.size())
+        {
+            Zbozi z = obchod.getNabidka().get(n);
+            k = kosik.indexPolozky(z);
+            if (k == -1)
+            {
+                k = kosik.size();
+                kosik.pridejPolozku(z, 0);
                 vystup.setText("Zboží přidáno do košíku");
             }
-        } else
-        {
-            kosik.zvysMnozstvi(index);
-            lstKosik.setListData(kosik.asStringArray());
-            lstKosik.setSelectedIndex(index);
-            vystup.setText("Zboží přidáno do košíku.\n");
         }
+
+        if (k >= 0 && k < kosik.size())
+            zvysMnozstvi(k,n);
+        else
+            vystup.setText("Není vybrána žádná položka.\n");
     }
-    private void btMinusActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btMinusActionPerformed
+    private void zvysMnozstvi(int k, int n) {
+        kosik.zvysMnozstvi(k);
+        lstKosik.setListData(kosik.asStringArray()); //prepisu items v kosiku na novy items s novym mnozstvim
+        lstKosik.setSelectedIndex(k);
+        lstNabidka.setSelectedIndex(n);
+    }
+    private void btPlusActionPerformed(ActionEvent evt) {
+        int k = lstKosik.getSelectedIndex(); // dostane index toho zbozi, ktere je označené uživatelem
+        if (k >= 0 && k < kosik.size())
+            zvysMnozstvi(k,-1);
+        else
+            vystup.setText("Není vybrána žádná položka.\n");
+    }
+    private void btMinusActionPerformed(ActionEvent evt) {
         int index = lstKosik.getSelectedIndex();
         try
         {
@@ -245,5 +265,5 @@ public class ApplicationWindow extends JFrame {
     private JLabel labNazev, labCena, labMnozstvi, labJednotka, labKosik, labNabidka;
     private JTextArea vystup;
     private JTextField tfNazev, tfMnozstvi, tfCena;
-    private JButton btPridatZbozi, btNacist, btUlozit, btVymazat, btOdstran, btPlus, btMinus, btVyprazdni, btTiskni;
+    private JButton btKoupit, btPridatZbozi, btNacist, btUlozit, btVymazat, btOdstran, btPlus, btMinus, btVyprazdni, btTiskni;
 }

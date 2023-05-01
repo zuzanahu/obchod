@@ -130,7 +130,10 @@ public class ObchodImpl implements Obchod {
         return pole;
     }
 
-
+    public int size()
+    {
+        return nabidka.size();
+    }
     /**
      * vypise nabidku do konzole
      */

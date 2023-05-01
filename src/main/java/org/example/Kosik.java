@@ -20,6 +20,10 @@ public class Kosik {
 
         return index;
     }
+    public int size()
+    {
+        return polozky.size();
+    }
 
     /**
      * zkontroluje jestli se "polozka" v "kosiku" vyskytuje a kdyz ano zvysi "mnozstvi" polozky, kdyz ne prida ji tam
@@ -38,6 +42,15 @@ public class Kosik {
         }
 
         polozky.add(p);
+    }
+    public void pridejPolozku(Zbozi z, int mnozstvi) {
+        int index = indexPolozky(z);
+        if (index == -1) {
+            Polozka p = new Polozka(z, mnozstvi);
+            polozky.add(p);
+        } else {
+            zvysMnozstvi(index);
+        }
     }
 
     /**
