@@ -15,15 +15,22 @@ public class Polozka {
         this(zbozi, 1);
     }
 
+    public void zvysMnozstvi(int pocet) {
+        this.mnozstvi += pocet;
+    }
+
     public void zvysMnozstvi() {
-        this.mnozstvi += zbozi.getJednotkoveMnozstvi();
+       this.zvysMnozstvi(1);
+    }
+
+    public void snizMnozstvi(int pocet) {
+        if ((this.mnozstvi - pocet) > 0) {
+            this.mnozstvi -= pocet;
+        }
     }
 
     public void snizMnozstvi() {
-        if (mnozstvi > zbozi.getJednotkoveMnozstvi()) {
-            this.mnozstvi -= zbozi.getJednotkoveMnozstvi();
-        }
-
+        this.snizMnozstvi(1);
     }
 
     /**

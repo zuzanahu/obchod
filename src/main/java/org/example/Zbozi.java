@@ -8,11 +8,14 @@ public  class Zbozi {
     int jednotkoveMnozstvi;
     double jednotkovaCena;
 
-    public Zbozi(String nazev, String jednotka, int jednotkoveMnozstvi, double jednotkovaCena) {
+    public int baleni;
+
+    public Zbozi(String nazev, String jednotka, int jednotkoveMnozstvi, double jednotkovaCena, int baleni) {
         this.jednotka = jednotka;
         this.nazev = nazev;
         this.jednotkoveMnozstvi = jednotkoveMnozstvi;
         this.jednotkovaCena = jednotkovaCena;
+        this.baleni = baleni;
     }
 
     public void setJednotkovaCena(double jednotkovaCena) {

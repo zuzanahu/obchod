@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.example.ObchodImpl;
 import org.example.Kosik;
+import org.example.Polozka;
 import org.example.Zbozi;
 
 public class ApplicationWindow extends JFrame {
@@ -54,6 +55,9 @@ public class ApplicationWindow extends JFrame {
         pEditor.add(tfCena);
         labJednotka = new JLabel("Jednoka");
         pEditor.add(labJednotka);
+        labBaleni = new JLabel("Mnozstvi v baleni");
+        pEditor.add(labBaleni);
+        tfBaleni = new JTextField("",8);
         cbJednotka = new JComboBox();
         cbJednotka.setModel(new DefaultComboBoxModel<>(new String[] { "g", "ks", "kg", "l" }));
         pEditor.add(cbJednotka);
@@ -99,6 +103,8 @@ public class ApplicationWindow extends JFrame {
         pTlacitkaKosik.setSize(new Dimension(40, 60));
         btKoupit = new JButton("Koupit");
         pTlacitkaKosik.add(btKoupit);
+        btBaleni = new JButton("Koupit celé balení");
+        pTlacitkaKosik.add(btBaleni);
         btPlus = new JButton("+");
         pTlacitkaKosik.add(btPlus);
         btMinus = new JButton("-");
@@ -126,7 +132,7 @@ public class ApplicationWindow extends JFrame {
 
         btKoupit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btKoupitActionPerformed(evt);
+                btKoupitActionPerformed();
             }
         });
         btPridatZbozi.addActionListener(new java.awt.event.ActionListener() {
@@ -152,43 +158,82 @@ public class ApplicationWindow extends JFrame {
 
         btPlus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btPlusActionPerformed(evt);
+                btPlusActionPerformed();
             }
+        });        btBaleni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btBaleniActionPerformed(evt);}
+
         });
     }
-    private void btKoupitActionPerformed(ActionEvent evt) {
+
+    private Polozka zajistiPolozku (Zbozi selectedZbozi) {
+            int indexPolozkyVKosiku = kosik.indexPolozky(selectedZbozi);
+
+            if (indexPolozkyVKosiku == -1)
+            {
+                Polozka novaPolozka = kosik.pridejPolozku(selectedZbozi, 0);
+                vystup.setText("Zboží přidáno do košíku");
+
+                return novaPolozka;
+            }
+
+            return kosik.getPolozka(indexPolozkyVKosiku);
+    }
+
+    /**
+     * Analyzuje lstKosik a lstNabidka. Pokud jeden z nich ma vybranou polozku tak vrazi informaci o danem zbozi
+     */
+    private Zbozi getSelectedZbozi () throws Exception {
         int k = lstKosik.getSelectedIndex(); // dostane index toho zbozi, ktere je označené uživatelem
         int n = lstNabidka.getSelectedIndex();
 
-        if (n >= 0  && n < obchod.size())
-        {
-            Zbozi z = obchod.getNabidka().get(n);
-            k = kosik.indexPolozky(z);
-            if (k == -1)
-            {
-                k = kosik.size();
-                kosik.pridejPolozku(z, 0);
-                vystup.setText("Zboží přidáno do košíku");
-            }
+        if (k >= 0 && k < kosik.size()) {
+            return kosik.getPolozka(k).getZbozi();
+        } else if (n >= 0 && n < obchod.getNabidka().size()) {
+            return obchod.getNabidka().get(n);
         }
 
-        if (k >= 0 && k < kosik.size())
-            zvysMnozstvi(k,n);
-        else
-            vystup.setText("Není vybrána žádná položka.\n");
+        throw new Exception("Není vybrána žádná položka.");
     }
-    private void zvysMnozstvi(int k, int n) {
-        kosik.zvysMnozstvi(k);
+
+    private void zvysMnozstvi(Zbozi vybraneZbozi, int pocet) {
+        kosik.zvysMnozstvi(kosik.indexPolozky(vybraneZbozi), pocet);
+
         lstKosik.setListData(kosik.asStringArray()); //prepisu items v kosiku na novy items s novym mnozstvim
+
+        zachovejVyber();
+    }
+
+    private void zachovejVyber () {
+        int k = lstKosik.getSelectedIndex(); // dostane index toho zbozi, ktere je označené uživatelem
+        int n = lstNabidka.getSelectedIndex();
         lstKosik.setSelectedIndex(k);
         lstNabidka.setSelectedIndex(n);
     }
-    private void btPlusActionPerformed(ActionEvent evt) {
-        int k = lstKosik.getSelectedIndex(); // dostane index toho zbozi, ktere je označené uživatelem
-        if (k >= 0 && k < kosik.size())
-            zvysMnozstvi(k,-1);
-        else
+
+    private void btBaleniActionPerformed(ActionEvent evt) {
+        try {
+            Zbozi vybraneZbozi = this.getSelectedZbozi();
+            Polozka polozka = zajistiPolozku(vybraneZbozi);
+
+            zvysMnozstvi(vybraneZbozi, polozka.getZbozi().baleni);
+        } catch (Exception error) {
             vystup.setText("Není vybrána žádná položka.\n");
+        }
+    }
+    private void btKoupitActionPerformed() {
+        try {
+            Zbozi vybraneZbozi = this.getSelectedZbozi();
+
+            zvysMnozstvi(vybraneZbozi, 1);
+        } catch (Exception error) {
+            vystup.setText("Není vybrána žádná položka.\n");
+        }
+    }
+
+    private void btPlusActionPerformed() {
+        this.btKoupitActionPerformed();
     }
     private void btMinusActionPerformed(ActionEvent evt) {
         int index = lstKosik.getSelectedIndex();
@@ -216,8 +261,9 @@ public class ApplicationWindow extends JFrame {
         int jednotkoveMnozstvi = Integer.parseInt(tfMnozstvi.getText());
         double jednotkovaCena = Double.parseDouble(tfCena.getText());
         String jednotka = (String) cbJednotka.getSelectedItem();
+        int baleni = Integer.parseInt(tfMnozstvi.getText());
 
-        obchod.pridejZbozi(new Zbozi(nazev, jednotka,  jednotkoveMnozstvi, jednotkovaCena));
+        obchod.pridejZbozi(new Zbozi(nazev, jednotka,  jednotkoveMnozstvi, jednotkovaCena, baleni));
         lstNabidka.setListData(obchod.nabidkaAsStringArray());
         vystup.setText("Zboží přidáno do nabídky.");
     }
@@ -262,8 +308,8 @@ public class ApplicationWindow extends JFrame {
     private JScrollPane scNabidka, scKosik, scText;
     private JList lstNabidka, lstKosik;
     private JComboBox cbJednotka;
-    private JLabel labNazev, labCena, labMnozstvi, labJednotka, labKosik, labNabidka;
+    private JLabel labNazev, labCena, labMnozstvi, labJednotka, labKosik, labNabidka, labBaleni;
     private JTextArea vystup;
-    private JTextField tfNazev, tfMnozstvi, tfCena;
-    private JButton btKoupit, btPridatZbozi, btNacist, btUlozit, btVymazat, btOdstran, btPlus, btMinus, btVyprazdni, btTiskni;
+    private JTextField tfNazev, tfMnozstvi, tfCena, tfBaleni;
+    private JButton btKoupit, btPridatZbozi, btNacist, btUlozit, btVymazat, btOdstran, btPlus, btMinus, btVyprazdni, btTiskni, btBaleni;
 }

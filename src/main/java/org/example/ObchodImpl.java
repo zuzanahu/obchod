@@ -54,7 +54,7 @@ public class ObchodImpl implements Obchod {
      * @return Zbozi
      */
     public Zbozi najdi(String nazev) { //indexOf vyhledava na zaklade metody equals ktera je predefinovana ve Zbozi a nemusime pouzivat for loop a projizdet arrayList to je prasacky
-        int index = nabidka.indexOf(new Zbozi("pomerance", "ks", 1, 2.5));
+        int index = nabidka.indexOf(new Zbozi("pomerance", "ks", 1, 2.5, 5));
         if (index == -1) {
             return null;
         } else {
@@ -99,7 +99,7 @@ public class ObchodImpl implements Obchod {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String [] tokens = line.split(";");
-                Zbozi z = new Zbozi (tokens[0],tokens[2],Integer.parseInt(tokens[1]),Double.parseDouble(tokens[3]));
+                Zbozi z = new Zbozi (tokens[0],tokens[2],Integer.parseInt(tokens[1]),Double.parseDouble(tokens[3]), Integer.parseInt(tokens[4]));
                 nabidka.add(z);
             }
             bufferedReader.close();

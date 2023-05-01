@@ -20,6 +20,12 @@ public class Kosik {
 
         return index;
     }
+
+    public Polozka getPolozka(int index)
+    {
+        return polozky.get(index);
+    }
+
     public int size()
     {
         return polozky.size();
@@ -43,14 +49,18 @@ public class Kosik {
 
         polozky.add(p);
     }
-    public void pridejPolozku(Zbozi z, int mnozstvi) {
+    public Polozka pridejPolozku(Zbozi z, int mnozstvi) {
         int index = indexPolozky(z);
         if (index == -1) {
             Polozka p = new Polozka(z, mnozstvi);
             polozky.add(p);
-        } else {
-            zvysMnozstvi(index);
+
+            return p;
         }
+
+        zvysMnozstvi(index);
+
+        return polozky.get(index);
     }
 
     /**
@@ -67,8 +77,12 @@ public class Kosik {
         return result;
     }
 
+    public void zvysMnozstvi(int index, int pocet) {
+        polozky.get(index).zvysMnozstvi(pocet);
+    }
+
     public void zvysMnozstvi(int index) {
-        polozky.get(index).zvysMnozstvi();
+        this.zvysMnozstvi(index, 1);
     }
 
     public void snizMnozstvi(int index) {
