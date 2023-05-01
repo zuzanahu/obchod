@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -139,5 +140,29 @@ public class ObchodImpl implements Obchod {
      */
     public void vypisNabidku() {
         System.out.println("aktualni nabidka je: " + String.join(", ", this.nabidkaAsStringArray()));
+    }
+
+    public String sestavUctenku(Kosik kosik)
+    {
+        Object[] obsah = kosik.obsah();
+
+        StringBuilder b = new StringBuilder("Offline obchod KupSiCoChceš\n");
+        b.append(new Date()).append("\n");
+
+        int mezisoucet = 0;
+        for (int i = 0; i < obsah.length; i++)
+        {
+            Polozka p = (Polozka)obsah[i];
+            mezisoucet += p.cena();
+            b.append(p);
+            b.append(" = ");
+            b.append(p.cena());
+            b.append(" Kč\n");
+        }
+        b.append(String.format("Celkem: %d Kč\n", mezisoucet));
+
+        b.append("Děkujeme, přijďte zas!\n");
+
+        return b.toString();
     }
 }

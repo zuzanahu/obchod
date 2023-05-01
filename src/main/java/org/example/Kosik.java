@@ -117,4 +117,8 @@ public class Kosik {
             pole[i] = polozky.get(i).toString();
         return pole;
     }
+
+    public Object[] obsah() {
+        return polozky.toArray();
+    }
 }
