@@ -217,7 +217,7 @@ public class ApplicationWindow extends JFrame {
             Zbozi vybraneZbozi = this.getSelectedZbozi();
             Polozka polozka = zajistiPolozku(vybraneZbozi);
 
-            zvysMnozstvi(vybraneZbozi, polozka.getZbozi().baleni);
+            zvysMnozstvi(vybraneZbozi, polozka.getZbozi().getBaleni());
         } catch (Exception error) {
             vystup.setText("Není vybrána žádná položka.\n");
         }

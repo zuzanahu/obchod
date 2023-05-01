@@ -8,7 +8,15 @@ public  class Zbozi {
     int jednotkoveMnozstvi;
     double jednotkovaCena;
 
-    public int baleni;
+    int baleni;
+
+    public int getBaleni() {
+        return baleni;
+    }
+
+    public void setBaleni(int baleni) {
+        this.baleni = baleni;
+    }
 
     public Zbozi(String nazev, String jednotka, int jednotkoveMnozstvi, double jednotkovaCena, int baleni) {
         this.jednotka = jednotka;
